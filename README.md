@@ -1,4 +1,4 @@
-# Welcome to the DevOps Wiki!
+# Welcome to the DevOps Information Center!
  _Need help? please reach out to the CODE Team at cicdteam@premierinc.onmicrosoft.com_ 
 <table>
   <tr>
