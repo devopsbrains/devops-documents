@@ -116,4 +116,5 @@
     </td>
   </tr>
 </table>
- _Need help? please reach out to the CODE Team at cicdteam@premierinc.onmicrosoft.com_ 
+
+<span style="color:blue">_Need help? please reach out to the CODE Team at cicdteam@premierinc.onmicrosoft.com_</span>
