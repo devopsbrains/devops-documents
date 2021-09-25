@@ -1,5 +1,5 @@
 # Welcome to the DevOps Information Center!
- _Need help? please reach out to the CODE Team at cicdteam@premierinc.onmicrosoft.com_ 
+
 <table>
   <tr>
     <th>Bamboo</th>
@@ -116,3 +116,4 @@
     </td>
   </tr>
 </table>
+ _Need help? please reach out to the CODE Team at cicdteam@premierinc.onmicrosoft.com_ 
