@@ -1,5 +1,3 @@
-# devops-documents
-this repo is to capture all DevOps related documents created by CODE team 
 # Welcome to the DevOps Wiki!
  _Need help? please reach out to the CODE Team at cicdteam@premierinc.onmicrosoft.com_ 
 <table>
