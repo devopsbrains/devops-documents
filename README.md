@@ -1,5 +1,4 @@
 # Welcome to the DevOps Information Center!
-
 <table>
   <tr>
     <th>Bamboo</th>
@@ -46,13 +45,12 @@
     <td>
       <ul>
         <li><a href="https://github.com/PremierInc/devops-documents/wiki/Continuous-Delivery">Continuous Delivery</a></li>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/A-simple-deployment-script">A simple deployment script</a></li>
      </ul>
     </td>
   </tr>
  <tr>
     <th>SSL Certificate</th>
-    <th>Artifacts</th>
+    <th>Nexus</th>
     <th>Docs</th>
   </tr>
   <tr>
@@ -68,48 +66,49 @@
     </td>
     <td>
       <ul>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Docs">Docs</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Docs">Confluence UserGuide</a></li>
      </ul>
     </td>
   </tr>
 <tr>
-    <th>Getting Started</th>
+    <th>IDE Connection with GitHub</th>
     <th>Source</th>
-    <th>Onboarding</th>
+    <th>IntelliJ</th>
   </tr>
   <tr>
     <td>
       <ul>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Getting-Started">Getting Started</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Procedure-for-Connecting-IntelliJ-with-GitHub">Procedure for Connecting IntelliJ with GitHub</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Procedure-for-Connecting-Visual-Studio-Code-with-GitHub">Procedure for Connecting Visual Studio Code with GitHub</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Procedure-to-connect-Visual-Studio-with-GitHub">Procedure to connect Visual Studio with GitHub</a></li>
      </ul>  
     </td>
     <td>
       <ul>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Source">Source</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Source">BitBucket UserGuide</a></li>
      </ul> 
     </td>
     <td>
       <ul>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Onboarding-:-DevOps-Induction-for-New-Employee">Onboarding</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/IntelliJ-IDE---FAQ">IntelliJ IDE-FAQ</a></li>
      </ul>
     </td>
   </tr>
 <tr>
-    <th>IntelliJ</th>
     <th>SSH Authentication Configuration for SCM Tools</th>
+    <th></th>
     <th></th>
   </tr>
   <tr>
     <td>
       <ul>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/IntelliJ-IDE---FAQ">IntelliJ IDE - FAQ</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Bitbucket---SSH-Configuration">Bitbucket - SSH Configuration</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Gitlab-SSH-Configuration">Gitlab - SSH Configuration</a></li>
+        <li><a href="https://github.com/PremierInc/devops-documents/wiki/SSH-Key-Pair-Generation">SSH Key Pair Generation</a></li>
      </ul>  
     </td>
     <td>
       <ul>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Bitbucket---SSH-Configuration">Bitbucket - SSH Configuration</a></li>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/Gitlab-SSH-Configuration">Gitlab - SSH Configuration</a></li>
-        <li><a href="https://github.com/PremierInc/devops-documents/wiki/SSH-Key-Pair-Generation">SSH Key Pair Generation</a></li>
      </ul>  
     </td>
     <td>
