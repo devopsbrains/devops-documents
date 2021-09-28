@@ -96,7 +96,7 @@
   </tr>
 <tr>
     <th>SSH Authentication Configuration for SCM Tools</th>
-    <th></th>
+    <th>Idea Idea APL admin guide</th>
     <th></th>
   </tr>
   <tr>
@@ -109,6 +109,7 @@
     </td>
     <td>
       <ul>
+       <li><a href="https://github.com/PremierInc/devops-documents/wiki/Idea---Idea-APL-admin-guide">Idea APL admin guide</a></li> 
      </ul>  
     </td>
     <td>
