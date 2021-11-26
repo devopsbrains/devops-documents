@@ -1,0 +1,127 @@
+# Azure DevOps Linux Pipeline
+This document contains various pipeline steps that can be followed in Azure DevOps Pipeline for different use cases when you are using **Premier Self Hosted Linux Agents**.
+
+# Table of Contents
+
+- [Pre-requisite](#pre-requisite)
+- [Available Packages](#available-packages)
+- [Environment Variables](#environment-variables)
+- [Pipeline Steps](#pipeline-steps)
+  - [Java Setup](#java-setup)
+  - [Maven Setup](#maven-setup)
+
+
+# Pre-requisite
+Premier Agents are hosted within the Premier network that provides access to other applications that are hosted within Premier. For example, **[Nexus](https://nexus.premierinc.com/artifacts)** application.  In order to use Premier Agents in your pipeline, specify the Pool name in the pipeline YAML code.  
+
+## Pipeline level
+If you want your entire pipeline to be executed in Premier agents, then specify
+```YAML
+pool:
+  name: "Premier Linux Agents"
+```
+
+## Stage level
+If you want to run a specific stage in Premier agents, then specify
+```YAML
+stages:
+- stage: Build
+  pool: "Premier Linux Agents"
+  jobs:
+  - job: ...
+```
+
+## Job Level
+If you want to run a specific job in Premier agents, then specify
+```YAML
+jobs:
+- job: ABC
+  pool: "Premier Linux Agents"
+```
+
+# Available Packages
+
+| Name | Use | Example | 
+| --- | --- | --- |
+| wget | wget [URL] | `wget https://google.com` |
+| Unzip | unzip [zip File] | `unzip bundle.zip` |
+| Docker | docker [command] | `docker version` |
+| Python3 | python3 [python file] | `python3 file.py` |
+| Python3-pip | python3 -m pip install [pip package] | `python3 -m pip install requests` |
+
+> **Note**  - Please find more packages in the next section (Environment variables). If any package required by your project is not available in the agent, please create a SNOW ticket.  Our Team will install the packages. 
+
+# Environment Variables
+
+We recommend teams use the below environment variables to use the packages installed in the agent. 
+
+| Name | Value | Example |
+| --- | ---  | --- |
+| SYSTEM_TOOLS | /opt/app/code/automate/tools | |
+| SYSTEM_JDK_8      | $SYSTEM_TOOLS/jdk-8         | `$(SYSTEM_JDK_8)/bin/java -version` |
+| SYSTEM_JDK_11     | $SYSTEM_TOOLS/jdk-11        | `$(SYSTEM_JDK_11)/bin/java -version` |
+| SYSTEM_JDK_17 | $SYSTEM_TOOLS/jdk-17  | `$(SYSTEM_JDK_17)/bin/java -version` |
+| SYSTEM_GH_CLI | $SYSTEM_TOOLS/gh_cli/bin/gh | `$(SYSTEM_GH_CLI) --version`. Also this executable is added to PATH.  So you can also use `gh --version` |
+| SYSTEM_KUBECTL | $SYSTEM_TOOLS/kubectl | `$(SYSTEM_KUBECTL) version --client`.  This executable is added to PATH. So you  can also use `kubectl version --client` |
+| SYSTEM_MAVEN_3 | $SYSTEM_TOOLS/apache-maven-3/bin/mvn | `$(SYSTEM_MAVEN_3) --version` |
+| SYSTEM_DOCKER_COMPOSE | $SYSTEM_TOOLS/docker-compose | `$(SYSTEM_DOCKER_COMPOSE) version`. This executable is also added to PATH. So you can use it as `docker-compose version` |
+
+
+## Best Practise
+In case if your pipeline is using the environment variables, you can add that to demands and hence it picks up agents with those capabilities. 
+```YAML
+pool:
+  name: Premier Linux Agents
+  demands:
+  - SYSTEM_JDK_8
+  - SYSTEM_MAVEN_3
+```
+
+### Reference [Microsoft Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/demands?view=azure-devops&tabs=yaml#manually-entered-demands)  
+
+
+# Pipeline Steps
+
+## Java Setup
+
+### Example 1: Set & Use java in same task
+```YAML
+- bash: | 
+    export JAVA_HOME="$SYSTEM_JDK_8"
+    echo "$JAVA_HOME"
+    $JAVA_HOME/bin/java -version
+```
+
+### Example 2: Set JAVA_HOME and use java in different task
+```YAML
+- bash: echo "##vso[task.setvariable variable=JAVA_HOME]$(SYSTEM_JDK_8)"
+- bash: |
+    echo $JAVA_HOME
+    echo $JAVA_HOME/bin/java -version
+```
+
+## Maven Setup
+Maven task depends on the JDK & Maven Path.  Please refer to environment variables section above for JDK and Maven path values. The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
+
+```YAML
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean'
+    publishJUnitResults: false
+    javaHomeOption: 'path'
+    jdkDirectory: $(SYSTEM_JDK_17)
+    mavenVersionOption: 'path'
+    mavenPath: $(SYSTEM_MAVEN_3)
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+```
+
+### Reference:  [Maven Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/maven?view=azure-devops)
+
+
+# Reference
+- [Pipeline YAML schema official reference document](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema)
+
+

@@ -16,6 +16,7 @@
       <ul>
         <li><a href="https://github.com/PremierInc/devops-documents/wiki/Premier-Azure-DevOps-User-Guide">Premier Azure DevOps User Guide</a></li>
         <li><a href="https://github.com/PremierInc/devops-documents/wiki/Procedure-for-Adding-Users-to-Azure-AD-Group">Procedure for Adding Users to Azure AD Group</a></li>
+        <li><a href="https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/linux_pipeline.md">Azure Devops Linux Pipeline Guidelines</a></li>
      </ul> 
     </td>
     <td>
