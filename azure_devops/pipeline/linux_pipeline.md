@@ -9,7 +9,9 @@ This document contains various pipeline steps that can be followed in Azure DevO
 - [Pipeline Steps](#pipeline-steps)
   - [Java Setup](#java-setup)
   - [Maven Setup](#maven-setup)
-
+- [Library](#library)
+- [Environment](#environment)
+- [Reference](#reference)
 
 # Pre-requisite
 Premier Agents are hosted within the Premier network that provides access to other applications that are hosted within Premier. For example, **[Nexus](https://nexus.premierinc.com/artifacts)** application.  In order to use Premier Agents in your pipeline, specify the Pool name in the pipeline YAML code.  
@@ -120,8 +122,16 @@ Maven task depends on the JDK & Maven Path.  Please refer to environment variabl
 
 ### Reference:  [Maven Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/maven?view=azure-devops)
 
+# Library
+Go [here](https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/library.md)
+
+# Environment
+Go [here](https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/environments.md)
 
 # Reference
 - [Pipeline YAML schema official reference document](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema)
+
+- Few sample pipeline configurations for difference use-cases are provided in the [examples](https://github.com/PremierInc/code-devops-documents/tree/main/azure_devops/pipeline/examples). 
+
 
 
