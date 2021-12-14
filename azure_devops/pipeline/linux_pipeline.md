@@ -9,6 +9,7 @@ This document contains various pipeline steps that can be followed in Azure DevO
 - [Pipeline Steps](#pipeline-steps)
   - [Java Setup](#java-setup)
   - [Maven Setup](#maven-setup)
+  - [Gradle Setup](#gradle-setup)
 - [Library](#library)
 - [Environment](#environment)
 - [Reference](#reference)
@@ -103,13 +104,17 @@ pool:
 ```
 
 ## Maven Setup
-Maven task depends on the JDK & Maven Path.  Please refer to environment variables section above for JDK and Maven path values. The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
+Maven task depends on the JDK & Maven Path.  Please refer to environment variables section above for JDK and Maven path values. 
 
+The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
+
+### Method 1: Using Maven Task
+**Reference**:  [Maven Task Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/maven?view=azure-devops)
 ```YAML
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean'
+    goals: 'clean deploy'
     publishJUnitResults: false
     javaHomeOption: 'path'
     jdkDirectory: $(SYSTEM_JDK_17)
@@ -120,7 +125,42 @@ Maven task depends on the JDK & Maven Path.  Please refer to environment variabl
     sonarQubeRunAnalysis: false
 ```
 
-### Reference:  [Maven Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/maven?view=azure-devops)
+### Method 2: Using Maven Command Line
+```YAML
+- bash: $MAVEN clean deploy
+  displayName: Maven Deploy
+  env:
+    JAVA_HOME: $(SYSTEM_JDK_17)
+    MAVEN: $(SYSTEM_MAVEN_3)
+```
+
+## Gradle Setup
+Gradle task in ADO works only if you have Gralde Wrapper File in your project. Also it depends on the JDK path that is required to run the Gradle Daemon.  Please refer to environment variables section above for JDK values.  The below snippet uses JDK 11 to run the Gradle task
+
+### Method 1: Using Gradle Task
+**Reference**:  [Gradle Task Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/gradle?view=azure-devops)
+```YAML
+- task: Gradle@2
+  displayName: Gradle Build
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'clean build'
+    publishJUnitResults: false
+    javaHomeOption: 'Path'
+    jdkDirectory: "$(SYSTEM_JDK_11)"
+    gradleOptions: '-Xmx3072m'
+    sonarQubeRunAnalysis: false
+```
+
+### Method 2: Using Command Line
+```YAML
+- bash: chmod +x gradlew && ./gradlew clean build
+  displayName: Gradle Build
+  env:
+    JAVA_HOME: $(SYSTEM_JDK_11)
+```
+
+
 
 # Library
 Go [here](https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/library.md)
