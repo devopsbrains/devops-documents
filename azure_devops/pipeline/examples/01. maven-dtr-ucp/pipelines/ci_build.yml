@@ -15,7 +15,7 @@ stages:
         jdkDirectory: $(SYSTEM_JDK_17)
         mavenVersionOption: 'path'
         mavenPath: $(SYSTEM_MAVEN_3)
-        options: '-Ddtr.username=$(DOCKER_USERNAME) -Ddtr.password=$(DOCKER_PASSWORD)'
+        options: '-B -Ddtr.username=$(DOCKER_USERNAME) -Ddtr.password=$(DOCKER_PASSWORD)'
 
     - publish: docker-compose.yml
       artifact: pipeline_artifact
