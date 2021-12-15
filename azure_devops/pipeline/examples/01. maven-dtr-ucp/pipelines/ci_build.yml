@@ -36,11 +36,13 @@ stages:
       displayName: Set Project Properties
       env:
         MAVEN: $(SYSTEM_MAVEN_3)
+        JAVA_HOME: $(SYSTEM_JDK_17)
 
     - bash: |
-        echo "Project Version: $(PROJECT_VERSION)"
-        echo "Project Artifact ID: $(PROJECT_ARTIFACTID)"
-        echo "Project Group ID: $(PROJECT_GROUPID)"
+        set -eu
+        echo "Project Version: $(project_properties.PROJECT_VERSION)"
+        echo "Project Artifact ID: $(project_properties.PROJECT_ARTIFACTID)"
+        echo "Project Group ID: $(project_properties.PROJECT_GROUPID)"
       displayName: Display Project Properties
       
   # blackduck scan & checkmarx_scan needs Project Version. 
