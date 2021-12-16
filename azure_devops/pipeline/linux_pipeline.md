@@ -115,6 +115,7 @@ The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean deploy'
+    options: '-B'
     publishJUnitResults: false
     javaHomeOption: 'path'
     jdkDirectory: $(SYSTEM_JDK_17)
