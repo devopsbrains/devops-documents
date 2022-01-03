@@ -23,6 +23,7 @@ Complete the below steps before writing YAML pipelines for maven ucp deployment 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-help-plugin</artifactId>
+                    <version>3.2.0</version>
                 </plugin>
             </plugins>
         </build>
