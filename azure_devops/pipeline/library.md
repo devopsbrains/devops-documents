@@ -85,7 +85,7 @@ jobs:
   variables:
   - group: example-dev      # this variable group has variable 'DB_PASS'
   steps:
-  - bash: echo $(DB_PASSWORD)
+  - bash: echo $DB_PASSWORD
     env:
       DB_PASSWORD: $(DB_PASS)       # explicitly assigning DB_PASS to DB_PASSWORD env variable.
 ```
