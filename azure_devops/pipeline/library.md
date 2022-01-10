@@ -22,7 +22,7 @@ Let's see few use cases where variable groups are best used.
 ## Use Case 1: Docker Credentials
 - We have two set of Docker credentials, one for non-prod (**docker-np-creds**) and one for prod (**docker-prod-creds**).  Each contains two variables `DOCKER_USERNAME` and `DOCKER_PASSWORD` as in below image:
 
-  ![docker-np-creds](https://github.com/PremierInc/code-devops-documents/blob/feature/example-maven-dtr-ucp/azure_devops/pipeline/resources/docker-np-creds.PNG?raw=true)
+  ![docker-np-creds](https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/resources/docker-np-creds.PNG?raw=true)
 
 - To use those two variables in pipeline, add yaml configuration as below: 
   ```YAML
