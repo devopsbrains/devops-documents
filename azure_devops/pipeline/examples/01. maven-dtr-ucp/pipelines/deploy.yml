@@ -34,7 +34,7 @@ stages:
   - group: ${{ parameters.docker_variable_group }}        # contains DOCKER_USERNAME & DOCKER_PASSWORD which is needed for UCP authentication
   - group: ${{ parameters.environment_variable_group }}   # container variables required for specific environments like DEV, QA
   - name: PROJECT_VERSION
-    value: $[ stagedependencies.set_properties.outputs['project_properties.PROJECT_VERSION'] ]
+    value: $[ stagedependencies.ci.set_properties.outputs['project_properties.PROJECT_VERSION'] ]
 
   jobs:
   - deployment: ucp_deploy
