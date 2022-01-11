@@ -68,6 +68,8 @@ We recommend teams use the below environment variables to use the packages insta
 | SYSTEM_KUBECTL | $SYSTEM_TOOLS/kubectl | `$(SYSTEM_KUBECTL) version --client`.  This executable is added to PATH. So you  can also use `kubectl version --client` |
 | SYSTEM_MAVEN_3 | $SYSTEM_TOOLS/apache-maven-3/bin/mvn | `$(SYSTEM_MAVEN_3) --version` |
 | SYSTEM_DOCKER_COMPOSE | $SYSTEM_TOOLS/docker-compose | `$(SYSTEM_DOCKER_COMPOSE) version`. This executable is also added to PATH. So you can use it as `docker-compose version` |
+| SYSTEM_NODEJS | $SYSTEM_TOOLS/node | `$(SYSTEM_NODEJS)/bin/node --version`. This executable is also added to PATH. So you can use it as `node --version` or `npm --version` |
+| SYSTEM_YARN | $SYSTEM_TOOLS/yarn | `$(SYSTEM_YARN)/bin/yarn --version`. This executable is also added to PATH. So you can use it as `yarn --version` |
 
 
 ## Best Practise
