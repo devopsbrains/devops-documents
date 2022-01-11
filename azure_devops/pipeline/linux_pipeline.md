@@ -10,6 +10,8 @@ This document contains various pipeline steps that can be followed in Azure DevO
   - [Java Setup](#java-setup)
   - [Maven Setup](#maven-setup)
   - [Gradle Setup](#gradle-setup)
+  - [NodeJS Setup](#nodejs-setup)
+  - [Yarn Setup](#yarn-setup)
 - [Library](#library)
 - [Environment](#environment)
 - [Reference](#reference)
@@ -163,7 +165,29 @@ Gradle task in ADO works only if you have Gralde Wrapper File in your project. A
     JAVA_HOME: $(SYSTEM_JDK_11)
 ```
 
+## NodeJS Setup
+### Method 1: Direct reference
+```YAML
+- bash: node --version
+```
+### Method 2: Using ENV variable
+```YAML
+- bash: $NODE --version
+  env:
+    NODE: $(SYSTEM_NODEJS)/bin/node
+```
 
+## YARN Setup
+### Method 1: Direct Reference
+```YAML
+- bash: yarn --version
+```
+### Method 2: Using ENV variable
+```YAML
+- bash: $YARN --version
+  env:
+    YARN: $(SYSTEM_YARN)/bin/yarn
+```
 
 # Library
 Go [here](https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/library.md)
