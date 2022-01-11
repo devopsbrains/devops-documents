@@ -125,9 +125,6 @@ The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
     jdkDirectory: $(SYSTEM_JDK_17)
     mavenVersionOption: 'path'
     mavenPath: $(SYSTEM_MAVEN_3)
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
 ```
 
 ### Method 2: Using Maven Command Line
@@ -154,7 +151,6 @@ Gradle task in ADO works only if you have Gralde Wrapper File in your project. A
     javaHomeOption: 'Path'
     jdkDirectory: "$(SYSTEM_JDK_11)"
     gradleOptions: '-Xmx3072m'
-    sonarQubeRunAnalysis: false
 ```
 
 ### Method 2: Using Command Line
