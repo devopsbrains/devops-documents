@@ -7,10 +7,10 @@ This document covers the steps to create and configure SSH Key pairs in GitHub s
 - Open Powershell (windows) / terminal (linux).
 - Run the below command to create new SSH Key Pairs.
 ```bash
-ssh-keygen -t ed25519 -C "github key pairs" -f <path>
+ssh-keygen -t ed25519 -f <path>
 
 # for example
-ssh-keygen -t ed25519 -C "github key pairs" -f $HOME/.ssh/github_ed25519
+ssh-keygen -t ed25519 -f $HOME/.ssh/github_ed25519
 ```
 - Press **Enter** without typing anything if it prompts for PassPhrase. This creates SSH key pairs without password/passphrase. 
   ![ssh-keygen.PNG](./resources/ssh-keygen.PNG)
