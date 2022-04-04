@@ -12,6 +12,7 @@ This document contains various pipeline steps that can be followed in Azure DevO
   - [Gradle Setup](#gradle-setup)
   - [NodeJS Setup](#nodejs-setup)
   - [Yarn Setup](#yarn-setup)
+  - [GO Setup](#go-setup)
 - [Library](#library)
 - [Environment](#environment)
 - [Reference](#reference)
@@ -74,7 +75,7 @@ We recommend teams use the below environment variables to use the packages insta
 | SYSTEM_YARN | $SYSTEM_TOOLS/yarn | `$(SYSTEM_YARN)/bin/yarn --version`. This executable is also added to PATH. So you can use it as `yarn --version` |
 | SYSTEM_LIQUIBASE | $SYSTEM_TOOLS/liquibase/liquibase | `$(SYSTEM_LIQUIBASE) --version`. This one holds the latest version of liquibase at all times. If you want a specific version, let us know. We will install and provide an ENV variable |
 | SYSTEM_LIQUIBASE_3_5_3 | $SYSTEM_TOOLS/liquibase-3.5.3/liquibase | `$(SYSTEM_LIQUIBASE_3_5_3) --version`. This points to liquibase version 3.5.3 |
-
+| SYSTEM_GO | $SYSTEM_TOOLS/go | `$(SYSTEM_GO)/bin/go version`. This executable is also added to PATH. So you can use it as `go version` directly |  
 
 ## Best Practise
 In case if your pipeline is using the environment variables, you can add that to demands and hence it picks up agents with those capabilities. 
@@ -185,6 +186,19 @@ Gradle task in ADO works only if you have Gralde Wrapper File in your project. A
 - bash: $YARN --version
   env:
     YARN: $(SYSTEM_YARN)/bin/yarn
+```
+
+## GO Setup
+### Method 1: Using ENV variable
+```YAML
+- bash: $GO version
+  env:
+    GO: $(SYSTEM_GO)/bin/go
+ ```
+ 
+### Method 2: Direct Reference
+```YAML
+- bash: go version
 ```
 
 # Library
