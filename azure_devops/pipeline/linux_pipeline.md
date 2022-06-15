@@ -64,12 +64,16 @@ We recommend teams use the below environment variables to use the packages insta
 | Name | Value | Example |
 | --- | ---  | --- |
 | SYSTEM_TOOLS | /opt/app/code/automate/tools | |
+| SYSTEM_JDK_1_6 | $SYSTEM_TOOLS/oracle_jdk/jdk1.6 | `$(SYSTEM_JDK_1_6)/bin/java -version`|  
 | SYSTEM_JDK_8      | $SYSTEM_TOOLS/jdk-8         | `$(SYSTEM_JDK_8)/bin/java -version` |
 | SYSTEM_JDK_11     | $SYSTEM_TOOLS/jdk-11        | `$(SYSTEM_JDK_11)/bin/java -version` |
 | SYSTEM_JDK_17 | $SYSTEM_TOOLS/jdk-17  | `$(SYSTEM_JDK_17)/bin/java -version` |
 | SYSTEM_GH_CLI | $SYSTEM_TOOLS/gh_cli/bin/gh | `$(SYSTEM_GH_CLI) --version`. Also this executable is added to PATH.  So you can also use `gh --version` |
 | SYSTEM_KUBECTL | $SYSTEM_TOOLS/kubectl | `$(SYSTEM_KUBECTL) version --client`.  This executable is added to PATH. So you  can also use `kubectl version --client` |
 | SYSTEM_MAVEN_3 | $SYSTEM_TOOLS/apache-maven-3/bin/mvn | `$(SYSTEM_MAVEN_3) --version` |
+| SYSTEM_MAVEN_3_HOME | $SYSTEM_TOOLS/apache-maven-3 | `$(SYSTEM_MAVEN_3_HOME)/bin/mvn --version` | 
+| SYSTEM_MAVEN_3_0_5 | $SYSTEM_TOOLS/apache-maven-3.0.5/bin/mvn | `$(SYSTEM_MAVEN_3_0_5) --version` |
+| SYSTEM_MAVEN_3_0_5_HOME | $SYSTEM_TOOLS/apache-maven-3.0.5 | `$(SYSTEM_MAVEN_3_0_5)/bin/mvn --version` |
 | SYSTEM_DOCKER_COMPOSE | $SYSTEM_TOOLS/docker-compose | `$(SYSTEM_DOCKER_COMPOSE) version`. This executable is also added to PATH. So you can use it as `docker-compose version` |
 | SYSTEM_NODEJS | $SYSTEM_TOOLS/node | `$(SYSTEM_NODEJS)/bin/node --version`. This executable is also added to PATH. So you can use it as `node --version` or `npm --version` |
 | SYSTEM_YARN | $SYSTEM_TOOLS/yarn | `$(SYSTEM_YARN)/bin/yarn --version`. This executable is also added to PATH. So you can use it as `yarn --version` |
