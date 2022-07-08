@@ -76,6 +76,8 @@ We recommend teams use the below environment variables to use the packages insta
 | SYSTEM_MAVEN_3_0_5_HOME | $SYSTEM_TOOLS/apache-maven-3.0.5 | `$(SYSTEM_MAVEN_3_0_5)/bin/mvn --version` |
 | SYSTEM_DOCKER_COMPOSE | $SYSTEM_TOOLS/docker-compose | `$(SYSTEM_DOCKER_COMPOSE) version`. This executable is also added to PATH. So you can use it as `docker-compose version` |
 | SYSTEM_NODEJS | $SYSTEM_TOOLS/node | `$(SYSTEM_NODEJS)/bin/node --version`. This executable is also added to PATH. So you can use it as `node --version` or `npm --version` |
+| SYSTEM_LERNA_3_22_1 | $SYSTEM_TOOLS/lerna/lerna_3_22_1/node_modules/.bin/lerna | `$(SYSTEM_LERNA_3_22_1) --version` | 
+| SYSTEM_LERNA_3_22_1_HOME | $SYSTEM_TOOLS/lerna/lerna_3_22_1/node_modules/.bin | `$(SYSTEM_LERNA_3_22_1_HOME)/lerna --version` |
 | SYSTEM_YARN | $SYSTEM_TOOLS/yarn | `$(SYSTEM_YARN)/bin/yarn --version`. This executable is also added to PATH. So you can use it as `yarn --version` |
 | SYSTEM_LIQUIBASE | $SYSTEM_TOOLS/liquibase/liquibase | `$(SYSTEM_LIQUIBASE) --version`. This one holds the latest version of liquibase at all times. If you want a specific version, let us know. We will install and provide an ENV variable |
 | SYSTEM_LIQUIBASE_3_5_3 | $SYSTEM_TOOLS/liquibase-3.5.3/liquibase | `$(SYSTEM_LIQUIBASE_3_5_3) --version`. This points to liquibase version 3.5.3 |
