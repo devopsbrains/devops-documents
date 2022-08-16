@@ -22,6 +22,9 @@ Normally, SSH uses port 22 for its operation which is blocked by Premier Firewal
 - Create file: `$HOME/.ssh/config` 
 - Copy the below content to that file. 
 ```
+Host *
+  AddKeysToAgent yes
+  
 Host github.com
   Hostname ssh.github.com
   Port 443
