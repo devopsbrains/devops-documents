@@ -1,0 +1,53 @@
+stages:
+- stage: ci
+  displayName: CI-Build
+  jobs:
+  
+  - job: set_properties
+    displayName: Set Properties
+    steps:
+    - bash: | 
+        groupId=$($MAVEN help:evaluate -Dexpression="project.groupId" -q -DforceStdout)
+        artifactId=$($MAVEN help:evaluate -Dexpression="project.artifactId" -q -DforceStdout)
+        version=$($MAVEN help:evaluate -Dexpression="project.version" -q -DforceStdout)
+        echo "##vso[task.setvariable variable=PROJECT_VERSION;isOutput=true]$version"
+        echo "##vso[task.setvariable variable=PROJECT_ARTIFACTID;isOutput=true]$artifactId"
+        echo "##vso[task.setvariable variable=PROJECT_GROUPID;isOutput=true]$groupId"
+      name: project_properties
+      displayName: Set Project Properties
+      env:
+        MAVEN: $(SYSTEM_MAVEN_3)
+        JAVA_HOME: $(SYSTEM_JDK_11)
+    - bash: |
+        set -eu
+        echo "Project Version: $(project_properties.PROJECT_VERSION)"
+        echo "Project Artifact ID: $(project_properties.PROJECT_ARTIFACTID)"
+        echo "Project Group ID: $(project_properties.PROJECT_GROUPID)"
+      displayName: Display Project Properties
+
+  - job: Build
+    dependsOn: set_properties
+    variables:
+      - group: 'DockerCredentials-plsmerck'
+      - name: PROJECT_VERSION
+        value: $[ dependencies.set_properties.outputs['project_properties.PROJECT_VERSION'] ]
+      - name: PROJECT_ARTIFACTID
+        value: $[ dependencies.set_properties.outputs['project_properties.PROJECT_ARTIFACTID'] ]
+
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: '-U -P fixtures clean install' 
+        options: '-B -Ddocker.username=$(DOCKER_USERNAME) -Ddocker.password=$(DOCKER_PASSWORD) -DskipTests=true'
+        javaHomeOption: 'path'
+        jdkDirectory: $(SYSTEM_JDK_11)
+        mavenVersionOption: 'path'
+        mavenPath: $(SYSTEM_MAVEN_3) 
+
+    - bash: docker image save -o image.tar $(PROJECT_ARTIFACTID):$(PROJECT_VERSION)
+      displayName: Create TAR Image 
+    
+    - publish: image.tar 
+      artifact: docker_image 
+      displayName: Create Artifacts 

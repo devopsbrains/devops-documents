@@ -1,0 +1,52 @@
+parameters: 
+- name: stage_name 
+- name: condition 
+- name: depends_on 
+  type: object 
+- name: ado_environment
+- name: azure_subscription 
+- name: app_service_name
+- name: docker_registry_service_connection
+- name: acr_registry_url
+
+stages:
+- stage: ${{ parameters.stage_name }} 
+  condition: ${{ parameters.condition }}
+  dependsOn: ${{ parameters.depends_on }}
+  variables:
+  - name: APP_VERSION
+    value: $[ stageDependencies.ci.set_properties.outputs['project_properties.PROJECT_VERSION'] ]
+  - name: ARTIFACTID
+    value: $[ stageDependencies.ci.set_properties.outputs['project_properties.PROJECT_ARTIFACTID'] ]
+  - name: GROUPID
+    value: $[ stageDependencies.ci.set_properties.outputs['project_properties.PROJECT_GROUPID'] ]
+  jobs:
+  - deployment: deploy 
+    environment: ${{ parameters.ado_environment }}
+    variables: 
+      ACR_IMAGE_NAME: "${{ parameters.acr_registry_url }}/$(ARTIFACTID):$(APP_VERSION)"
+    strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: Docker@2
+                displayName: Docker ACR Login
+                inputs:
+                  containerRegistry: "${{ parameters.docker_registry_service_connection }}"
+                  command: 'login'
+                  addPipelineData: false
+                  addBaseImageData: false 
+
+              - bash: | 
+                  docker image load -i image.tar
+                  docker image tag $(ARTIFACTID):$(APP_VERSION) $(ACR_IMAGE_NAME)
+                  docker image push $(ACR_IMAGE_NAME)
+                workingDirectory: $(Pipeline.Workspace)/docker_image
+                displayName: Push Image to acr 
+
+              - task: AzureWebAppContainer@1
+                displayName: 'Azure Web App on Container Deploy'
+                inputs:
+                  azureSubscription: ${{ parameters.azure_subscription }}
+                  appName: ${{ parameters.app_service_name }}
+                  imageName: $(ACR_IMAGE_NAME)

@@ -1,0 +1,36 @@
+stages:
+- template: ci.yaml 
+
+- template: deploy.yaml 
+  parameters: 
+    stage_name: dev_deploy 
+    condition: succeeded()
+    depends_on: ['ci']
+    ado_environment: 'lms-cm-web-dev'
+    azure_subscription: 'SC_ARM_LMS_NP' 
+    app_service_name: 'lms-web-cm-dev'
+    docker_registry_service_connection: 'lmsdev1acr'
+    acr_registry_url: 'lmsdev1acr.azurecr.io'
+
+- template: deploy.yaml 
+  parameters: 
+    stage_name: qa_deploy 
+    condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/develop'))
+    depends_on: ['ci']
+    ado_environment: 'lms-cm-web-qa'
+    azure_subscription: 'SC_ARM_LMS_NP' 
+    app_service_name: 'lms-web-cm-qa'
+    docker_registry_service_connection: 'lmsqa1acr'
+    acr_registry_url: 'lmsqa1acr.azurecr.io'
+
+
+- template: deploy.yaml 
+  parameters: 
+    stage_name: prod_deploy 
+    condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/main'))
+    depends_on: ['ci']
+    ado_environment: 'lms-cm-web-prod'
+    azure_subscription: 'SC_ARM_LMS_PROD' 
+    app_service_name: 'lms-web-cm-prod'
+    docker_registry_service_connection: 'lmsprod1acr'
+    acr_registry_url: 'lmsprod1acr.azurecr.io'
