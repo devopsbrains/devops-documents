@@ -86,6 +86,7 @@ We recommend teams use the below environment variables to use the packages insta
 | SYSTEM_LIQUIBASE | $SYSTEM_TOOLS/liquibase/liquibase | `$(SYSTEM_LIQUIBASE) --version`. This one holds the latest version of liquibase at all times. If you want a specific version, let us know. We will install and provide an ENV variable |
 | SYSTEM_LIQUIBASE_3_5_3 | $SYSTEM_TOOLS/liquibase-3.5.3/liquibase | `$(SYSTEM_LIQUIBASE_3_5_3) --version`. This points to liquibase version 3.5.3 |
 | SYSTEM_GO | $SYSTEM_TOOLS/go | `$(SYSTEM_GO)/bin/go version`. This executable is also added to PATH. So you can use it as `go version` directly |  
+| SYSTEM_AZCOPY | $SYSTEM_TOOLS/azcopy/azcopy | `$(SYSTEM_AZCOPY) --version`. This executable is in path. So you can use `azcopy --version` directly. | 
 
 ## Best Practise
 In case if your pipeline is using the environment variables, you can add that to demands and hence it picks up agents with those capabilities. 
