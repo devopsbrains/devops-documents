@@ -13,6 +13,7 @@ This document contains various pipeline steps that can be followed in Azure DevO
   - [NodeJS Setup](#nodejs-setup)
   - [Yarn Setup](#yarn-setup)
   - [GO Setup](#go-setup)
+- [Upload Artifacts to Nexus](#upload-artifacts-to-nexus)
 - [Library](#library)
 - [Environment](#environment)
 - [Reference](#reference)
@@ -211,6 +212,9 @@ Gradle task in ADO works only if you have Gralde Wrapper File in your project. A
 ```YAML
 - bash: go version
 ```
+
+# Upload Artifacts to Nexus
+Go [here](./upload_nexus_artifacts.md)
 
 # Library
 Go [here](https://github.com/PremierInc/code-devops-documents/blob/main/azure_devops/pipeline/library.md)
