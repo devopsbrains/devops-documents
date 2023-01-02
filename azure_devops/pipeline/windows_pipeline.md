@@ -5,7 +5,7 @@ This document contains various pipeline steps that can be followed in Azure DevO
 
 - [Pre-requisite](#pre-requisite)
 - [Pipeline Steps](#pipeline-steps)
-  - [Nuget Package Upload](#nuget-package-upload)
+- [Reference](#reference)
 
 # Pre-requisite
 Premier Agents are hosted within the Premier network that provides access to other applications that are hosted within Premier. For example, **[Nexus](https://nexus.premierinc.com/artifacts)** application.  In order to use Premier Agents in your pipeline, specify the Pool name in the pipeline YAML code.  
@@ -37,16 +37,6 @@ jobs:
 
 # Pipeline Steps
 
-## Nuget Package Upload
-In order to upload Nuget Package to Nexus, use the below Pipeline Task
 
-```YAML
-  - task: NuGetCommand@2
-    inputs:
-      command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-      nuGetFeedType: 'external'
-      publishFeedCredentials: 'Nexus_Nuget-Inflow'
-```
-
-`Nexus_Nuget-Inflow` is the name of the service connection of type "NuGet" configured in the Azure DevOps Project.  If not configured, please ask our team to configure it for you.  We created one service connection in CODE ADO project and then share the same connection across other projects in Azure DevOps. 
+# Reference
+- To upload packages to Nexus, please check [this document](./upload_nexus_artifacts.md)

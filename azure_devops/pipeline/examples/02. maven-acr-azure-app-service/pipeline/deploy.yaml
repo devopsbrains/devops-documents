@@ -25,6 +25,7 @@ stages:
     environment: ${{ parameters.ado_environment }}
     variables: 
       ACR_IMAGE_NAME: "${{ parameters.acr_registry_url }}/$(ARTIFACTID):$(APP_VERSION)"
+      ACR_LATEST_IMAGE: "${{ parameters.acr_registry_url }}/$(ARTIFACTID):latest"
     strategy:
         runOnce:
           deploy:
@@ -41,8 +42,11 @@ stages:
                   docker image load -i image.tar
                   docker image tag $(ARTIFACTID):$(APP_VERSION) $(ACR_IMAGE_NAME)
                   docker image push $(ACR_IMAGE_NAME)
+
+                  docker image tag $(ARTIFACTID):$(APP_VERSION) $(ACR_LATEST_IMAGE)
+                  docker image push $(ACR_LATEST_IMAGE)
                 workingDirectory: $(Pipeline.Workspace)/docker_image
-                displayName: Push Image to acr 
+                displayName: Push Image to acr
 
               - task: AzureWebAppContainer@1
                 displayName: 'Azure Web App on Container Deploy'

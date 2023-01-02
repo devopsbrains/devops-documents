@@ -1,3 +1,5 @@
+pool: Premier Linux Agents
+
 stages:
 - template: ci.yaml 
 
