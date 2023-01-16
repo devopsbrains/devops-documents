@@ -10,7 +10,7 @@ A Generic Service Connection must be created that must contain the SMTP details.
 - Create Generic Service Connection
   | Field | Value |
   | -- | -- |
-  | Server URL | https://premierinc.mail.protection.outlook.com:25 | 
+  | Server URL | https://mailgate.premierinc.com:587 | 
   | Username (optional) | Your Premier Email Address |
   | Password/Token Key (optional) | Your Premier Password |
   | Service Connection Name | email_automation_sc |
