@@ -2,24 +2,9 @@
 This document covers steps to email the test results & reports after pipeline execution.
 
 # Pre-requisite
-A Generic Service Connection must be created that must contain the SMTP details. To do so, follow the steps:
-- Go to **Project Settings**.
-- Go to **Service Connections**
-- Create a new Service Connection and search for **Generic Service Connection**.
-
-- Create Generic Service Connection
-  | Field | Value |
-  | -- | -- |
-  | Server URL | https://mailgate.premierinc.com:587 | 
-  | Username (optional) | Your Premier Email Address |
-  | Password/Token Key (optional) | Your Premier Password |
-  | Service Connection Name | email_automation_sc |
-  | Description (optional) | automation email | 
-  | Security | Select `Enable - Grant access permission to all pipelines` | 
-- Click Create. 
-
-> **Note: Once the service connection is created and if you want to modify any values, do not edit it. Please delete the service connection and create a new one.**
-
+A Generic Service Connection must be created that must contain the SMTP details. 
+- Check if any service connection in the name `Premier_Email_*` is present in your project. To do so, **Project -> Settings -> Service Connections**. If it is not present, please raise a SNOW Ticket on our team to create the service connection.
+- Once the Admins completed this request, you will see the Service Connection in your project. 
 
 # Add Email Task To Pipeline
 Create a new job like `Email Automation` and add below configuration to pipeline.
@@ -45,7 +30,7 @@ Create a new job like `Email Automation` and add below configuration to pipeline
           includeOthersInTotal: false
           usePreviousEnvironment: false
           enableTLS: true
-          smtpConnectionEndpoint: 'email_automation_sc' # service connection name you created in pre-requisite step
+          smtpConnectionEndpoint: 'PremierInc_Email_SC-PincAI' # service connection name created in Pre-requisite
 ```
 
 # Reference
