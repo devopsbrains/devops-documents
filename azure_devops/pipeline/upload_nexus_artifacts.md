@@ -4,6 +4,7 @@ This section covers steps to be followed for uploading artifacts to Nexus.
 # Table of Contents
 - [Python PYPI](#python-pypi)
 - [DotNet NuGet](#dotnet-nuget)
+- [NPM](#npm)
 
 # Python PYPI
 | index | url | description | 
@@ -32,3 +33,26 @@ In order to upload Nuget Package to Nexus, use the below Pipeline Task:
 ```
 
 `Nexus_Nuget-Inflow` is the name of the service connection of type "NuGet" configured in the Azure DevOps Project.  If not configured, please ask our team to configure it for you.  We created one service connection in CODE ADO project and then shared the same connection across other projects in Azure DevOps. 
+
+# NPM
+Publish NPM packages to Nexus. The NPM URL of the Nexus is configured on the Build Agents. The credentials of the Nexus Registry is also configured on the Build agents. 
+| Repository | URL |
+| --- | --- | 
+| premier-npm | https://nexus.premierinc.com/artifacts/repository/premier-npm/ |
+
+
+```yaml
+# package.json file
+{
+  "private": false
+  "publishConfig": {
+    "registry": "http://nexus.premierinc.com/artifacts/repository/premier-npm/"
+  }
+  ...
+}
+```
+```yaml
+# pipeline yaml file
+- bash: npm publish 
+```
+
