@@ -5,10 +5,6 @@ parameters:
 
 - name: stage_name
 
-- name: az_acr_sc
-
-- name: az_acr_registry_url
-
 - name: az_app_service
 
 - name: az_subscription_sc
@@ -39,10 +35,6 @@ stages:
     environment: "${{ parameters.ado_environment }}"
 
     variables:
-      APP_VERSION: $[ stageDependencies.ci.set_properties.outputs['project_properties.PROJECT_VERSION'] ]
-      ARTIFACTID: $[ stageDependencies.ci.set_properties.outputs['project_properties.PROJECT_ARTIFACTID'] ]
-      ACR_IMAGE_NAME: "${{ parameters.az_acr_registry_url }}/$(ARTIFACTID):$(APP_VERSION)"
-      ACR_LATEST_IMAGE: "${{ parameters.az_acr_registry_url }}/$(ARTIFACTID):latest"
       ${{ if in(parameters.blue_green, 'False', 'false') }}:
         APP_SERVICE_SLOT: 'production'
       ${{ if in(parameters.blue_green, 'True', 'true') }}:
@@ -52,47 +44,23 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: Docker@2
-            displayName: ACR Login
+          - task: AzureRmWebAppDeployment@4
             inputs:
-              containerRegistry: "${{ parameters.az_acr_sc }}"
-              command: 'login'
-
-          - bash: docker image load -i image.tar
-            displayName: Load Image from TAR
-            workingDirectory: $(Pipeline.Workspace)/docker_image
-
-          - bash: |
-              docker image tag $(ARTIFACTID):$(APP_VERSION) $(ACR_IMAGE_NAME)
-              docker image push $(ACR_IMAGE_NAME)
-
-              docker image tag $(ARTIFACTID):$(APP_VERSION) $(ACR_LATEST_IMAGE)
-              docker image push $(ACR_LATEST_IMAGE)
-            displayName: Tag and Push Image to ACR
-
-          - task: Docker@2
-            displayName: ACR Logout
-            inputs:
-              containerRegistry: "${{ parameters.az_acr_sc }}"
-              command: 'logout'
-
-          - task: AzureWebAppContainer@1
-            inputs:
+              ConnectionType: 'AzureRM'
               azureSubscription: ${{ parameters.az_subscription_sc }}
-              resourceGroupName: ${{ parameters.az_app_service_rg }}
-              appName: ${{ parameters.az_app_service }}
+              ResourceGroupName: ${{ parameters.az_app_service_rg }}
+              WebAppName: ${{ parameters.az_app_service }}
+              appType: 'webAppLinux'
               deployToSlotOrASE: true
-              slotName: '$(APP_SERVICE_SLOT)'
-              imageName: "$(ACR_IMAGE_NAME)"
-              appSettings: >
-                -cqdoc_dev_app_yml_v3 "$(var_cqdoc_dev_app_yml_v3)"
+              SlotName: '$(APP_SERVICE_SLOT)'
+              packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+              StartupCommand: 'pm2 start ./app.js --no-daemon'
+              RuntimeStack: 'NODE|18-lts'
+              AppSettings: >
                 -SPRING_PROFILES_ACTIVE $(var_spring_profiles_active)
-                -SPRING_CONFIG_LOCATION "classpath:/application.yml,classpath:/bootstrap.yml,file:/opt/app/config/application.yml"
-                -WEBSITE_HEALTHCHECK_MAXPINGFAILURES "5"
-                -WEBSITE_PULL_IMAGE_OVER_VNET true
-                -WEBSITES_ENABLE_APP_SERVICE_STORAGE false
-                -WEBSITES_PORT 8080
+                -PORT 8080
 
+          # Only active slots can be swapped. Hence starting the standyby slot if not started already
           - task: AzureAppServiceManage@0
             displayName: Start the App Service if not started properly
             inputs:
@@ -116,6 +84,7 @@ stages:
                 SpecifySlotOrASE: true
                 Slot: 'staging'
 
+
 # in blue green model, first app is deploy to "staging" slot.  
 # If all looks good, do a LB switch to "production" slot
 - ${{ if in(parameters.blue_green, 'True', 'true') }}:
@@ -129,9 +98,7 @@ stages:
         runOnce:
           deploy:
             steps:
-            - download: none
-            
-            # Only active slots can be swapped. Hence starting the standyby slot if not started already
+            - download: none 
             - task: AzureAppServiceManage@0
               displayName: Start the Standby Slot
               inputs:
@@ -162,3 +129,4 @@ stages:
                 Action: 'Stop Azure App Service' 
                 SpecifySlotOrASE: true
                 Slot: 'staging'
+              

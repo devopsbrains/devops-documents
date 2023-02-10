@@ -1,0 +1,27 @@
+stages:
+- stage: ci
+  jobs:
+  - job: build
+    steps:
+    - task: NodeTool@0
+      displayName: Set NodeJS
+      inputs:
+        versionSpec: '18.14.x'
+
+    - bash: npm ci --verbose
+      displayName: Install NPM Dependencies
+
+    - bash: mkdir output ; cp -R node_modules app.js output/
+      displayName: Package files
+
+    - task: ArchiveFiles@2  
+      inputs:
+        rootFolderOrFile: 'output'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: 'output.zip'
+        replaceExistingArchive: true
+
+    - publish: output.zip
+      artifact: deploy
+

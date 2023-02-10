@@ -51,13 +51,13 @@
                             <goal>build</goal>
                         </goals>
                     </execution>
-                    <execution>
+                    <!-- <execution>
                         <id>docker-push</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>push</goal>
                         </goals>
-                    </execution>
+                    </execution> -->
                 </executions>
                 <configuration>
                     <skip>${no-docker}</skip>

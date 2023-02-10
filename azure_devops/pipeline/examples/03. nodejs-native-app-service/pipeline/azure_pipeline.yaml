@@ -1,0 +1,17 @@
+pool: Premier Linux Agents
+
+stages:
+- template: ci.yaml
+
+- template: deploy.yaml
+  parameters:
+    stage_name: DEV_DEPLOY
+    depends_on: ['ci']
+     # set blue_green to False if there is no approvers for the environment or 
+     # if you don't want blue_green deployment model
+    blue_green: false 
+    ado_environment: 'cqdoc-provision-dev'
+    az_subscription_sc: "SC_ARM_SUB_CQDOC_NP"
+    az_app_service: 'testnodeappdev'
+    az_app_service_rg: "cqdocDEVLinuxPlanRG"
+    deploy_variable_group: 'cqdoc-provision-dev-azure'
