@@ -6,9 +6,6 @@ Follow this document if you use maven to build your docker image and push to ACR
   - Open snow ticket with cloud security team for this [here](https://premierprod.service-now.com/premiernow?id=dept_cat_item&sys_id=c64bdf091bdc2494be08975e034bcbbb)
   - Select "Azure" in Environment.
 
-- Docker Registry service connection for ACR is needed. For example, if your acr name is `lmsprod1acr.azurecr.io`, then create docker registry service connection of type ACR with name `SC_ACR_LMSPROD1ACR`.
-    - Open snow ticket with cloud security team for this [here](https://premierprod.service-now.com/premiernow?id=dept_cat_item&sys_id=c64bdf091bdc2494be08975e034bcbbb)
-  - Select "Azure" in Environment.
 - App service name will be provided by cloud devops team. No need Service connection for this in ADO. 
 
 # Steps
@@ -36,9 +33,14 @@ Follow this document if you use maven to build your docker image and push to ACR
 ```
 - We push the image to ACR during the deploy step and then deploy to Azure app service. Refer to `pipeline/deploy.yaml` file.
 - We need library groups to store **configurations** for your app services.
-  - in this example, we have created "library group" `cqdoc-provision-dev-azure` that contains the key/value pairs. 
+  - in this example, we have created "library group" `cqdoc-provision-dev-azure` that contains the key/value pairs. The below keys are mandatory as they are used in `deploy.yaml` file. 
+    | Name | Value | 
+    | --- | --- |
+    | var_acr_name | lmsdevacr |
+    | var_az_app_service_rg | RG_CommonEast_LMS | 
+    | var_az_app_service | lms_config_service | 
+
     ![library_group](./resources/library_group.png)
-  - These variables are used in the `pipeline/deploy.yaml` file. 
 
 - This example allows you to do `blue_green` deployment model. 
 - We have templatized the pipeline files and check the `pipeline` directory.
