@@ -31,14 +31,14 @@ This document explains how to configure `Spring Cloud Config Server` application
   ```
   Host github.com
     Hostname ssh.github.com
-    Port 443
+    Port 22
     User git
     IdentityFile ~/.ssh/id_ecdsa
     AddKeysToAgent yes
     StrictHostKeyChecking yes
   ```
 
-  > **Note**: Port 443 is recommended and if it does not work, then try Port 22. 
+  > **Note**: Port 443 is supported for Cloning via SSH over HTTPS port for GitHub Enterpsie
 
 - In your `application.yml` file, specify the GitHub repository URL:
     ```yaml
@@ -53,4 +53,3 @@ This document explains how to configure `Spring Cloud Config Server` application
 # Reference
 - [Spring Cloud Config](https://cloud.spring.io/spring-cloud-config/multi/multi__spring_cloud_config_server.html#_spring_cloud_config_server)
 - [GitHub Deploy Keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)
-- [GitHub Port 443 instead of 22](https://docs.github.com/en/authentication/troubleshooting-ssh/using-ssh-over-the-https-port#enabling-ssh-connections-over-https)
