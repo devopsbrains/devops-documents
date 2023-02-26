@@ -38,7 +38,7 @@ This document explains how to configure `Spring Cloud Config Server` application
     StrictHostKeyChecking yes
   ```
 
-  > **Note**: Port 443 is supported for Cloning via SSH over HTTPS port for GitHub Enterpsie
+  > **Note**: Port 443 is not supported for Cloning via SSH over HTTPS port for GitHub Enterpsie
 
 - In your `application.yml` file, specify the GitHub repository URL:
     ```yaml
