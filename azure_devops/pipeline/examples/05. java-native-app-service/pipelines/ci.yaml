@@ -1,0 +1,24 @@
+stages:
+- stage: ci
+  jobs:
+  - job: Build
+    steps:
+    - task: Maven@3
+      displayName: Maven Build
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        goals: 'clean package'
+        options: '-B'
+        javaHomeOption: 'path'
+        jdkDirectory: $(SYSTEM_JDK_17)
+        mavenVersionOption: 'path'
+        mavenPath: $(SYSTEM_MAVEN_3)
+        publishJUnitResults: true
+
+    - bash: mkdir artifacts ; cp target/pasta-bishop-*.jar artifacts/
+      displayName: Prepare Artifacts
+
+    - publish: artifacts
+      artifact: deploy
+      displayName: Publish Artifact
