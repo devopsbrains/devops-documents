@@ -13,6 +13,7 @@ This document contains various pipeline steps that can be followed in Azure DevO
   - [NodeJS Setup](#nodejs-setup)
   - [Yarn Setup](#yarn-setup)
   - [GO Setup](#go-setup)
+  - [Python Setup](#python-setup)
 - [Upload Artifacts to Nexus](#upload-artifacts-to-nexus)
 - [Library](#library)
 - [Environment](#environment)
@@ -88,6 +89,8 @@ We recommend teams use the below environment variables to use the packages insta
 | SYSTEM_LIQUIBASE_3_5_3 | $SYSTEM_TOOLS/liquibase-3.5.3/liquibase | `$(SYSTEM_LIQUIBASE_3_5_3) --version`. This points to liquibase version 3.5.3 |
 | SYSTEM_GO | $SYSTEM_TOOLS/go | `$(SYSTEM_GO)/bin/go version`. This executable is also added to PATH. So you can use it as `go version` directly |  
 | SYSTEM_AZCOPY | $SYSTEM_TOOLS/azcopy/azcopy | `$(SYSTEM_AZCOPY) --version`. This executable is in path. So you can use `azcopy --version` directly. | 
+| SYSTEM_PYTHON_3 | /usr/bin/python3 | `$(SYSTEM_PYTHON_3) --version`. Defaults to current version `3.8.x` |
+| SYSTEM_PYTHON_3_11 | /usr/bin/python3.11 | `$(SYSTEM_PYTHON_3_11) --version` | 
 
 ## Best Practise
 In case if your pipeline is using the environment variables, you can add that to demands and hence it picks up agents with those capabilities. 
@@ -127,8 +130,23 @@ Maven task depends on the JDK & Maven Path.  Please refer to environment variabl
 
 The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
 
-### Method 1: Using Maven Task
-**Reference**:  [Maven Task Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/maven?view=azure-devops)
+### Method 1: Using Maven Task@4 (Recommended)
+**Reference**: [Maven Task@4 Official Document](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/maven-v4?view=azure-pipelines)
+```YAML
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean deploy'
+    options: '-B'
+    javaHomeOption: 'Path'
+    jdkDirectory: '$(SYSTEM_JDK_17)'
+    mavenVersionOption: 'Path'
+    mavenDirectory: '$(SYSTEM_MAVEN_3_HOME)'
+```
+
+or Using Maven Task@3 (Old-Not Recommended)
+
+**Reference**:  [Maven Task@3 Official Document](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/maven?view=azure-devops)
 ```YAML
 - task: Maven@3
   inputs:
@@ -149,6 +167,13 @@ The below snippet uses JDK 17 and Maven 3 to run the Maven Task.
   env:
     JAVA_HOME: $(SYSTEM_JDK_17)
     MAVEN: $(SYSTEM_MAVEN_3)
+```
+or
+```YAML
+- bash: $MAVEN/bin/mvn clean deploy
+  env:
+    JAVA_HOME: $(SYSTEM_JDK_17)
+    MAVEN: $(SYSTEM_MAVEN_3_HOME)
 ```
 
 ## Gradle Setup
@@ -211,6 +236,21 @@ Gradle task in ADO works only if you have Gralde Wrapper File in your project. A
 ### Method 2: Direct Reference
 ```YAML
 - bash: go version
+```
+
+## Python Setup
+### Method 1: Using ENV variable
+```YAML
+- bash: |
+    $PYTHON --version
+    $PYTHON -m pip install -r requirements.txt
+  env:
+    PYTHON: $(SYSTEM_PYTHON_3)
+```
+
+### Method 2: Direct Reference
+```YAML
+- bash: python3 --version
 ```
 
 # Upload Artifacts to Nexus
