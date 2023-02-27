@@ -34,16 +34,16 @@ stages:
         value: $[ dependencies.set_properties.outputs['project_properties.PROJECT_VERSION'] ]
     displayName: BUILD
     steps:
-      - task: Maven@3
+      - task: Maven@4
         displayName: Maven Build
         inputs:
           mavenPomFile: 'pom.xml'
           goals: 'clean install -Ddocker.username=$(DOCKER_USERNAME) -Ddocker.password=$(DOCKER_PASSWORD)'
           options: '-B'
-          javaHomeOption: 'path'
+          javaHomeOption: 'Path'
           jdkDirectory: $(SYSTEM_JDK_11)
-          mavenVersionOption: 'path'
-          mavenPath: $(SYSTEM_MAVEN_3)
+          mavenVersionOption: 'Path'
+          mavenDirectory: $(SYSTEM_MAVEN_3_HOME)
 
       - bash: docker image save -o image.tar $(ARTIFACT_ID):$(APP_VERSION)
         displayName: Create TAR Image 
