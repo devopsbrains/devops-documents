@@ -4,6 +4,7 @@ This document covers steps to email the test results & reports after pipeline ex
 # Pre-requisite
 A Generic Service Connection must be created that must contain the SMTP details. 
 - Check if any service connection in the name `Premier_Email_*` is present in your project. To do so, **Project -> Settings -> Service Connections**. If it is not present, please raise a SNOW Ticket on our team to create the service connection.
+  > Note: ADO Admins must follow [this document](https://dev.azure.com/premierinc/CODE/_wiki/wikis/AzureDevOps.wiki/2283/Email-Test-Results-Report-via-Pipeline) to create service connection. Only ADO Admins have access to this document. 
 - Once the Admins completed this request, you will see the Service Connection in your project. 
 
 # Add Email Task To Pipeline
