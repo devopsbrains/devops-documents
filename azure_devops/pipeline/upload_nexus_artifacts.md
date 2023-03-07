@@ -35,24 +35,38 @@ In order to upload Nuget Package to Nexus, use the below Pipeline Task:
 `Nexus_Nuget-Inflow` is the name of the service connection of type "NuGet" configured in the Azure DevOps Project.  If not configured, please ask our team to configure it for you.  We created one service connection in CODE ADO project and then shared the same connection across other projects in Azure DevOps. 
 
 # NPM
-Publish NPM packages to Nexus. The NPM URL of the Nexus is configured on the Build Agents. The credentials of the Nexus Registry is also configured on the Build agents. 
-| Repository | URL |
-| --- | --- | 
-| premier-npm | https://nexus.premierinc.com/artifacts/repository/premier-npm/ |
+Publish NPM packages to Nexus. The Nexus NPM Registries URL and credentials are configured on the Build Agents. 
+| Repository | URL | Description
+| --- | --- | --- |
+| premier-npm | https://nexus.premierinc.com/artifacts/repository/premier-npm/ | - Publish same version multiple times and overwrite package.<br>- Packages in this repositories are short lived and will be deleted as per our cleanup policy.<br> **Note**: Use this only for development purpose. | 
+| premier-npm-releases | https://nexus.premierinc.com/artifacts/repository/premier-npm-releases | A version can be published only once.<br>**Note**: Use this for production release. |
 
-
-```yaml
-# package.json file
-{
-  "private": false
-  "publishConfig": {
-    "registry": "http://nexus.premierinc.com/artifacts/repository/premier-npm/"
+- Remove the publish Config from package.json file so that your pipeline will have the ability to choose the registry at run-time. 
+  ```yaml
+  # package.json file
+  {
+    "private": false
+    # remove this publishConfig if you have
+    "publishConfig": {
+      "registry": "http://nexus.premierinc.com/artifacts/repository/premier-npm/"
+    }
+    ...
   }
-  ...
-}
-```
-```yaml
-# pipeline yaml file
-- bash: npm publish 
-```
+  ```
+- Pipeline changes in YAML file. Based on the branch, choosing the NPM Registry. 
+  ```YAML
+  # pipeline YAML file
+  - bash: |
+      set -e
+
+      # considering "main" branch is production branch of this repo.
+      if [[ "${{ variables['Build.SourceBranch'] }}" = "refs/heads/main" ]] ; then
+          NPM_REGISTRY="https://nexus.premierinc.com/artifacts/repository/premier-npm-releases/"
+      else
+          NPM_REGISTRY="https://nexus.premierinc.com/artifacts/repository/premier-npm/"
+      fi
+      npm publish --verbose --access public --registry "$NPM_REGISTRY"
+      echo "Publishing to NPM Registry: $NPM_REGISTRY is completed successfully !!!"
+    displayName: Publish NPM Package to Nexus
+  ```
 
