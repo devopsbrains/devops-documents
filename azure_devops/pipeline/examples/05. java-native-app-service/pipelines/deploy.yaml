@@ -57,7 +57,9 @@ stages:
               Package: $(Pipeline.Workspace)/deploy/pasta-bishop-*.jar
               # Optional StartUpCommand
               # StartupCommand: 'java -jar app*.jar'
-              RuntimeStack: Java 17 SE
+              # RuntimeStack & linuxFxVersion in ConfigurationSettings are mandatory to set proper Stack.
+              RuntimeStack: "JAVA|17-java17"
+              ConfigurationSettings: '-linuxFxVersion JAVA|17-java17'
               AppSettings: >
                 -SPRING_PROFILES_ACTIVE $(var_spring_profiles_active)
 

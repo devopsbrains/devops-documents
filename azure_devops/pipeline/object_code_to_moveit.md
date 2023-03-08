@@ -2,8 +2,8 @@
 This document contains steps on how to copy your object code (war/jar/etc.,) to MoveIT as part of the Enterprise License Agreement.
 
 # Options
-- **Option 1:** Copy the single object code to MoveIT as soon as the production deployment is successful. 
-- **Option 2:** A separate Pipeline that copies all the object code to MoveIT.
+- **Option 1:** Copy a single object code to MoveIT as soon as the production deployment is successful.
+- **Option 2:** A separate Pipeline that copies all the object code from Nexus to MoveIT.
 
 ## Option 1: Copy the object code to MoveIT as part of the Production pipeline
 Use this method if you want to copy the object code to MoveIT once your prod deployment is successful.  Also, this method requires you to modify all your pipelines to add the sftp-to-moveit YAML template so that as soon as the prod deployment is successful, it copies the object code (war/jar/etc.,) to MoveIT.
@@ -12,7 +12,7 @@ Use this method if you want to copy the object code to MoveIT once your prod dep
 - Get access from **Geoff Vallano** to the MoveIT Server: `https://sdt.premierinc.com/`
 - Ask Geoff to create a service user for you to use in your pipelines. You’ll need to give him an ssh key pair to associate with it. You can generate one with the command: 
   ```bash
-  ssh-keygen -b 4096 -t rsa -f moveitkey
+  ssh-keygen -b 4096 -t rsa -m pem -f moveitkey
   ```
   This will create two files: `moveitkey` and `moveitkey.pub`. Give the .pub file to Geoff.
 - Upload the private key `moveitkey` in **ADO Pipeline -> Library -> Secure File**. Give it a name: **moveit-private-key**
@@ -73,12 +73,14 @@ stages:
 ```
 
 ## Option 2: A separate Pipeline that copies all the object code to MoveIT.
-This option is possible only when all your object codes (war, jar, etc) are in Nexus. 
+In this option, you will have a separate repository to maintain a config file and a separate pipeline for copying all object code from Nexus to MoveIT.
+
+> **Note: This option is possible only when all your object codes (war, jar, etc) are in Nexus**
 
 ### Pre-requisite
 - Get access from **Geoff Vallano** to the MoveIT Server: `https://sdt.premierinc.com/`
 - Ask Geoff to create a service user for you to use in your pipelines. Get the username & password for the service user. We need to save them in `Azure Pipelines -> Library`.
-- Create a library group called "moveit-creds" and save the credentials in this key/value format. **Note**: Replace the Value column with your service user credentials. 
+- Create a library group called `moveit-creds` and save the credentials in this key/value format. **Note**: Replace the Value column with your service user credentials. 
 
     | Key | Value |
     | --- | --- |
@@ -96,28 +98,28 @@ This option is possible only when all your object codes (war, jar, etc) are in N
   moveit_directory: "/ObjectCode/WorkForceManagement"
   applications:
   # pip is for python. downloads from "premier-pypi"
-  - pip: remitra-py-settings:latest  # or remitra-py-settings:0.2.0
+  - pip: remitra-py-settings1:latest  # or remitra-py-settings:0.2.0
   # gav is for maven "releases"
-  - gav: com.premierinc.shield:cx-wrapper-script:0.9:zip:Checkmarx
+  - gav: com.premierinc.shield:cx-wra1per-script:0.9:zip:Checkmarx
     bundle: true # default true. Accepted values true/false
-  - gav: com.premierinc.shield:cx-wrapper-script:latest:zip
+  - gav: com.premierInc.shield:cx-wrapP1er-script:latest:zip
   # npm uses "premier-npm"
-  - npm: ciam-idle-timeout:1.1.1
-  - npm: ciam-idle-timeout:latest
-  - gav: com.premier.user.web:IAMRest:latest
+  - npm: ciam-idly-timeout:1.1.1
+  - npm: ciam-idly-timeout:latest
+  - gav: com.premierhelp.users.web:IAMRestStopper:latest
 
 - product_name: "XYZ" # without spaces
   moveit_directory: "/ObjectCode/WorkForceManagement"
   applications:
-  - gav: com.premierinc.shield:cx-wrapper-script:0.9:zip:Checkmarx
+  - gav: com.premierinc.shieldaget:cx-avengers-script:0.9:zip:Checkmarx
     bundle: true # default true. Accepted values true/false
-  - gav: com.premierinc.shield:cx-wrapper-script:latest:zip
-  - npm: ciam-idle-timeout:1.1.1
-  - npm: ciam-idle-timeout:latest
+  - gav: com.premierinc.shieldprotector:cx-wrappersin-script:latest:zip
+  - npm: ciam-idly-timeoutPass:1.1.1
+  - npm: ciam-idly-timeoutabc:latest
 ```
 
 ### Pipeline Steps
-- Create the `azure-pipeline.yaml` pipeline file and have the below contents. 
+- Create the `azure-pipeline.yaml` pipeline file and have the below contents. In this pipeline, we are using a template file `moveit_template.yaml` from [PremierInc/code-nexustomoveit](https://github.com/PremierInc/code-nexustomoveit) repository that has the automation script to download the object code from Nexus and copying it to MoveIT.
 ```YAML
 # azure-pipeline.yaml file
 trigger: none 
