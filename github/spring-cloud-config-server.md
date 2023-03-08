@@ -1,12 +1,13 @@
 # Purpose
 This document explains how to configure `Spring Cloud Config Server` application so that it pulls configuration from GitHub repository.  Previously teams were using Bitbucket repository to pull configurations. Going forward, they have to follow this document to switch to GitHub.
 
-# Steps
-### In GitHub
+# Pre-requisite
 - Create a Identity File Key Pair using below command.  This creates two files: `id_ecdsa` (private key) and `id_ecdsa.pub` (public key).
-    ```bash
-    ssh-keygen -t ecdsa -m pem -f id_ecdsa
-    ```
+
+  ```bash
+  ssh-keygen -t ecdsa -m pem -f id_ecdsa
+  ```
+
 - Hand over the `id_ecdsa.pub` file to GitHub Admin.
 - Request them to add the public key to the GitHub repository **Settings** -> **Deploy Keys** and provide read-only access to the Keys.
 
@@ -15,19 +16,26 @@ This document explains how to configure `Spring Cloud Config Server` application
 > - `ECDSA` is one type of encryption. Similary you can use `ED25519`. 
 > - `RSA` format not supported
 
-### In App
-- Create the known_hosts file by running the below command and save it in the environment (VM or Docker container) where App runs.
+
+# Steps
+- We need three files:
+  - ~/.ssh/known_hosts
+  - ~/.ssh/config
+  - ~/.ssh/<private_key>
+
+- Create the `known_hosts` file by running the below command and save it in the environment (VM or Docker container) where App runs.
+
   ```bash
-  ssh-keyscan github.com > ~/.ssh/known_hosts
+  ssh-keyscan github.com >> ~/.ssh/known_hosts
   ```
-- Store the `id_ecdsa` file created in the previous step in the app environment (VM/Docker container) where app runs.
+- Store the `id_ecdsa` file created in the pre-requisite in the app environment (VM/Docker container) where app runs.
     ```bash
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
     cp id_ecdsa ~/.ssh/id_ecdsa
     chmod 600 ~/.ssh/id_ecdsa
     ```
-- Create SSH `config` file:
+- Create SSH `~/.ssh/config` file. 
   ```
   Host github.com
     Hostname ssh.github.com
@@ -38,7 +46,7 @@ This document explains how to configure `Spring Cloud Config Server` application
     StrictHostKeyChecking yes
   ```
 
-  > **Note**: Port 443 is not supported for Cloning via SSH over HTTPS port for GitHub Enterpsie
+  > **Note**: Port 443 is not supported for Cloning via SSH over HTTPS port for GitHub Enterprise. 
 
 - In your `application.yml` file, specify the GitHub repository URL:
     ```yaml
