@@ -34,16 +34,47 @@ stages:
         deploy:
           steps:
 
-          # Starting the app service before upgrading
+          # Stopping the app service before upgrading
           - task: AzureAppServiceManage@0
-            displayName: Start the App Service
+            displayName: Stop the App Service
             inputs:
               azureSubscription:  ${{ parameters.az_subscription_sc }} 
               ResourceGroupName: $(var_az_app_service_rg)
               WebAppName: $(var_az_app_service)
-              Action: 'Start Azure App Service' 
+              Action: 'Stop Azure App Service'
               SpecifySlotOrASE: true
               Slot: '$(APP_SERVICE_SLOT)'
+
+          # We need to update the app settings prior to deployment as azure app service behaves wierd while upgrading python version. 
+          - task: AzureAppServiceSettings@1
+            displayName: Update App Settings
+            inputs:
+              azureSubscription: ${{ parameters.az_subscription_sc }}
+              appName: $(var_az_app_service)
+              resourceGroupName: $(var_az_app_service_rg)
+              slotName: '$(APP_SERVICE_SLOT)'
+              appSettings: |
+                [
+                  {
+                    "name": "HAL_ACTIVE_PROFILE",
+                    "value": "$(var_spring_profiles_active)"
+                  },
+                  {
+                    "name": "PORT",
+                    "value": "8008"
+                  },
+                  {
+                    "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                    "value": "true"
+                  }
+                ]
+              # This is mandatory to set the Azure App Service Stack.
+              generalSettings: |
+                [
+                  {
+                    "linuxFxVersion": "PYTHON|3.11"
+                  }
+                ]
 
           - task: AzureRmWebAppDeployment@4
             inputs:
@@ -58,11 +89,17 @@ stages:
               # Optional if your startUpCommand is different
               StartupCommand: 'gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8008'
               RuntimeStack: 'PYTHON|3.11'
-              # SCM_DO_BUILD_DURING_DEPLOYMENT mandatory parameter
-              AppSettings: >
-                -SCM_DO_BUILD_DURING_DEPLOYMENT true 
-                -HAL_ACTIVE_PROFILE $(var_spring_profiles_active)
-                -PORT 8008
+
+          # Starting the app service before upgrading
+          - task: AzureAppServiceManage@0
+            displayName: Start the App Service
+            inputs:
+              azureSubscription:  ${{ parameters.az_subscription_sc }} 
+              ResourceGroupName: $(var_az_app_service_rg)
+              WebAppName: $(var_az_app_service)
+              Action: 'Start Azure App Service' 
+              SpecifySlotOrASE: true
+              Slot: '$(APP_SERVICE_SLOT)'
 
           # if blue_green is false, then app directly deploy to "production" slot
           # hence we are stopping staging slot for saving resources.
@@ -82,6 +119,10 @@ stages:
 # If all looks good, do a LB switch to "production" slot
 - ${{ if in(parameters.blue_green, 'True', 'true') }}:
   - stage: ${{ parameters.stage_name }}_GREEN_LIVE
+    
+    variables:
+      - group: "${{ parameters.deploy_variable_group }}"
+
     condition: ${{ parameters.condition }}
     dependsOn: ${{ parameters.stage_name }}
     jobs:
