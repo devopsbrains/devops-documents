@@ -34,17 +34,59 @@ stages:
         deploy:
           steps:
 
-          # Starting the app service before upgrading
+          # Stopping the app service before upgrading
           - task: AzureAppServiceManage@0
-            displayName: Start the App Service
+            displayName: Stop the App Service
             inputs:
               azureSubscription:  ${{ parameters.az_subscription_sc }} 
               ResourceGroupName: $(var_az_app_service_rg)
               WebAppName: $(var_az_app_service)
-              Action: 'Start Azure App Service' 
+              Action: 'Stop Azure App Service' 
               SpecifySlotOrASE: true
               Slot: '$(APP_SERVICE_SLOT)'
 
+          - task: AzureAppServiceSettings@1
+            displayName: Updating App Settings
+            inputs:
+              azureSubscription: ${{ parameters.az_subscription_sc }}
+              appName: $(var_az_app_service)
+              resourceGroupName: $(var_az_app_service_rg)
+              slotName: '$(APP_SERVICE_SLOT)'
+              appSettings: |
+                [
+                  {
+                    "name": "SPRING_PROFILES_ACTIVE",
+                    "value": "$(var_spring_profiles_active)"
+                  },
+                  {
+                    "name": "PORT",
+                    "value": "8080"
+                  },
+                  {
+                    "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                    "value": "~3"
+                  },
+                  {
+                    "name": "XDT_MicrosoftApplicationInsights_Mode",
+                    "value": "recommended"
+                  },
+                  {
+                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                    "value": "$(var_APPINSIGHTS_INSTRUMENTATIONKEY)"
+                  },
+                  {
+                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                    "value": "$(var_APPLICATIONINSIGHTS_CONNECTION_STRING)"
+                  }
+                ]
+              # This is mandatory to set the Azure App Service Stack.
+              generalSettings: |
+                [
+                  {
+                    "linuxFxVersion": "JAVA|11-java11"
+                  }
+                ]
+                
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
@@ -54,14 +96,19 @@ stages:
               appType: 'webAppLinux'
               deployToSlotOrASE: true
               SlotName: '$(APP_SERVICE_SLOT)'
-              Package: $(Pipeline.Workspace)/deploy/pasta-bishop-*.jar
-              # Optional StartUpCommand
-              # StartupCommand: 'java -jar app*.jar'
-              # RuntimeStack & linuxFxVersion in ConfigurationSettings are mandatory to set proper Stack.
-              RuntimeStack: "JAVA|17-java17"
-              ConfigurationSettings: '-linuxFxVersion JAVA|17-java17'
-              AppSettings: >
-                -SPRING_PROFILES_ACTIVE $(var_spring_profiles_active)
+              Package: $(Pipeline.Workspace)/drop/*.jar
+              RuntimeStack: "JAVA|11-java11"
+          
+          # Starting the app service.
+          - task: AzureAppServiceManage@0
+            displayName: Start the App Service
+            inputs:
+              azureSubscription:  ${{ parameters.az_subscription_sc }} 
+              ResourceGroupName: $(var_az_app_service_rg)
+              WebAppName: $(var_az_app_service)
+              Action: 'Start Azure App Service' 
+              SpecifySlotOrASE: true
+              Slot: '$(APP_SERVICE_SLOT)'
 
           # if blue_green is false, then app directly deploy to "production" slot
           # hence we are stopping staging slot for saving resources.
@@ -83,6 +130,10 @@ stages:
   - stage: ${{ parameters.stage_name }}_GREEN_LIVE
     condition: ${{ parameters.condition }}
     dependsOn: ${{ parameters.stage_name }}
+    
+    variables:
+      - group: "${{ parameters.deploy_variable_group }}"
+
     jobs:
     - deployment: switch_slots
       environment: "${{ parameters.ado_environment }}"
