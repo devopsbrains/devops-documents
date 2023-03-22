@@ -4,6 +4,7 @@ This document contains various pipeline steps that can be followed in Azure DevO
 # Table of Contents
 
 - [Pre-requisite](#pre-requisite)
+- [Environment Variables](#environment-variables)
 - [Pipeline Steps](#pipeline-steps)
   - [DotNet](#dotnet)
   - [NuGet](#nuget)
@@ -12,14 +13,14 @@ This document contains various pipeline steps that can be followed in Azure DevO
 # Pre-requisite
 Premier Agents are hosted within the Premier network that provides access to other applications that are hosted within Premier. For example, **[Nexus](https://nexus.premierinc.com/artifacts)** application.  In order to use Premier Agents in your pipeline, specify the Pool name in the pipeline YAML code.  
 
-## Pipeline level
+### Pipeline level
 If you want your entire pipeline to be executed in Premier agents, then specify
 ```YAML
 pool:
   name: "Premier Windows Agents"
 ```
 
-## Stage level
+### Stage level
 If you want to run a specific stage in Premier agents, then specify
 ```YAML
 stages:
@@ -29,7 +30,7 @@ stages:
   - job: ...
 ```
 
-## Job Level
+### Job Level
 If you want to run a specific job in Premier agents, then specify
 ```YAML
 jobs:
@@ -37,30 +38,72 @@ jobs:
   pool: "Premier Windows Agents"
 ```
 
+# Environment Variables
+The following environment variables are available on the agent. 
+| Env Variable | Value | 
+| --- | --- |
+| SYSTEM_CHROMEDRIVER_EXE | c:\seleniumdrivers\chromedriver.exe |
+| SYSTEM_MSEDGEDRIVER_EXE | c:\seleniumdrivers\msedgedriver.exe |
+| SYSTEM_JDK_11 | C:\Program Files\Eclipse Adoptium\jdk-11 |
+| SYSTEM_JDK_17 | C:\Program Files\Eclipse Adoptium\jdk-17 |
+| SYSTEM_JDK_8 | C:\Program Files\Eclipse Adoptium\jdk-8 |
+| SYSTEM_MAVEN_3 | C:\ProgramData\chocolatey\lib\maven\apache-maven-3\bin\mvn |
+| SYSTEM_MAVEN_3_HOME | C:\ProgramData\chocolatey\lib\maven\apache-maven-3 |
+| SYSTEM_NUGET_CONFIG | C:\Program Files (x86)\NuGet\Config\NuGet.config |
+| SYSTEM_PYTHON | python | 
+
+# Packages on the Agent
+
+## Packages
+- JDK 8/11/17
+- Apache Maven 3
+- DotNet Framework 4.5/4.6/4.7/4.8
+- Visual Studio 2022 Community
+- Visual Studio 2019 Community
+- Python
+- Az Copy
+- Azure CLI
+- DotNet
+- DotNet Core
+- Browsers
+  - Google Chrome
+  - Microsoft Edge
+- Git
+- Powershell Core
+- DAC Framework 18
+- SQL Package
+- made2010
+
+## Powershell Modules
+- MicrosoftPowerBIMgmt
+- AzureAD
+- MSOnline
+- SQL Server
+
 # Pipeline Steps
 
 ## DotNet
 
-**Option 1:**: Recommended
+**Option 1:** Command line
 ```YAML
 - powershell: dotnet restore
 ```
 
-**Option 2:** Use this option only if you have `NuGet.Config` file in your project and that has NuGet feed pointing to Nexus. Check [appendix](#appendix) section.
+**Option 2:** DotNetCore ADO Task
 ```YAML
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
     command: 'restore'
     feedsToUse: 'config'
-    nugetConfigPath: NuGet.Config
+    nugetConfigPath: $(SYSTEM_NUGET_CONFIG) # uses NuGet.Config file on the Agent.
     projects: '**/*.csproj'
     includeNuGetOrg: false 
 ```
 
 ## NuGet
 
-**Option 1:**: Recommended
+**Option 1:** Command line
 ```YAML
 - task: NuGetToolInstaller@1
   displayName: Install NuGet
@@ -68,7 +111,7 @@ jobs:
 - powershell: nuget restore abc.sln
   displayName: NuGet Restore
 ```
-**Option 2:** Use this option only if you have `NuGet.Config` file in your project and that has NuGet feed pointing to Nexus.  Check [appendix](#appendix) section.
+**Option 2:**  NuGet Command ADO Task
 ```YAML
 - task: NuGetToolInstaller@1
   displayName: Install NuGet
@@ -79,7 +122,7 @@ jobs:
     restoreSolution: '**/*.sln'
     includeNuGetOrg: false
     feedsToUse: 'config'
-    nugetConfigPath: NuGet.Config
+    nugetConfigPath: $(SYSTEM_NUGET_CONFIG) # uses NuGet.Config file on the Agent.
 ```
 
 
