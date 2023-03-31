@@ -1,0 +1,432 @@
+{
+  "source-project": "Jira Project Name",
+  "target-project": "ADO Project Name",
+  "query": "JQL QUERY",
+  "using-jira-cloud": false,
+  "workspace": "E:\\UserFolder\\JIRAInstalledFolder\\Export_ProjectName",
+  "epic-link-field": "Epic Link",
+  "sprint-field": "Sprint",
+  "download-options": 7,
+  "batch-size": 20,
+  "log-level": "Info",
+  "attachment-folder": "Attachments",
+  "user-mapping-file": "E:\\UserFolder\\JIRAInstalledFolder\\migration\\users.txt",
+  "base-area-path": "ADO AREA PATH",
+  "base-iteration-path": " ",
+  "ignore-failed-links": true,
+  "process-template": "Scrum",
+  "link-map": {
+    "link": [
+      {
+        "source": "Epic",
+        "target": "System.LinkTypes.Hierarchy-Reverse"
+      },
+      {
+        "source": "Parent",
+        "target": "System.LinkTypes.Hierarchy-Reverse"
+      },
+      {
+        "source": "Child",
+        "target": "System.LinkTypes.Hierarchy-Forward"
+      },
+      {
+        "source": "Relates",
+        "target": "System.LinkTypes.Related"
+      },
+      {
+        "source": "clones",
+        "target": "System.LinkTypes.Related"
+      },
+      {
+        "source": "Duplicate",
+        "target": "System.LinkTypes.Related"
+      }
+    ]
+  },
+  "type-map": {
+    "type": [
+      {
+        "source": "Epic",
+        "target": "Feature"
+      },
+      {
+        "source": "Story",
+        "target": "User Story"
+      },
+      {
+        "source": "Spike",
+        "target": "Spike"
+      },
+      {
+        "source": "Client Case",
+        "target": "Incident"
+      },
+      {
+        "source": "Internal Case",
+        "target": "Incident"
+      },
+      {
+        "source": "Dependency",
+        "target": "Risk"
+      },
+      {
+        "source": "Impediment",
+        "target": "Risk"
+      },
+      {
+        "source": "Pre-Condition",
+        "target": "User Story"
+      },
+      {
+        "source": "Risk",
+        "target": "Risk"
+      },
+      {
+        "source": "Bug",
+        "target": "Defect"
+      },
+      {
+        "source": "Support",
+        "target": "Incident"
+      },
+      {
+        "source": "Innovation",
+        "target": "User Story"
+      },
+      {
+        "source": "Operations",
+        "target": "User Story"
+      },
+      {
+        "source": "Change Request",
+        "target": "User Story"
+      },
+      {
+        "source": "Task",
+        "target": "User Story"
+      },
+      {
+        "source": "Sub-task",
+        "target": "Task"
+      },
+      {
+        "source": "Milestone",
+        "target": "Milestone"
+      },
+      {
+        "source": "TechDebt",
+        "target": "User Story"
+      },
+      {
+        "source": "Release Notes",
+        "target": "User Story"
+      },     
+      {
+        "source": "Feature or Enabler",
+        "target": "Epic"
+      },     
+      {
+        "source": "Profiling",
+        "target": "User Story"
+      },     
+      {
+        "source": "Test",
+        "target": "Task"
+      },     
+      {
+        "source": "Test Execution",
+        "target": "Task"
+      },     
+      {
+        "source": "Test Plan",
+        "target": "Task"
+      },     
+      {
+        "source": "Test Set",
+        "target": "Task"
+      },
+      {
+        "source": "Defect",
+        "target": "Defect"
+      },	  
+      {
+        "source": "Sub Test Execution",
+        "target": "Task"
+      }
+    ]
+  },
+  "field-map": {
+    "field": [
+      {
+        "source": "summary",
+        "target": "System.Title",
+        "mapper": "MapTitle"
+      },
+      {
+        "source": "assignee",
+        "target": "System.AssignedTo",
+        "mapper": "MapUser"
+      },
+      {
+        "source": "description",
+        "target": "System.Description",
+        "mapper": "MapRendered"
+      },
+      {
+        "source": "priority",
+        "target": "Microsoft.VSTS.Common.Priority",
+        "mapping": {
+          "values": [
+            {
+              "source": "Blocker",
+              "target": "1"
+            },
+            {
+              "source": "Critical",
+              "target": "1"
+            },
+            {
+              "source": "Highest",
+              "target": "1"
+            },
+            {
+              "source": "Major",
+              "target": "2"
+            },
+            {
+              "source": "High",
+              "target": "2"
+            },
+            {
+              "source": "Medium",
+              "target": "3"
+            },
+            {
+              "source": "Average",
+              "target": "3"
+            },
+            {
+              "source": "Low",
+              "target": "3"
+            },
+            {
+              "source": "Lowest",
+              "target": "4"
+            },
+            {
+              "source": "Minor",
+              "target": "4"
+            },
+            {
+              "source": "Trivial",
+              "target": "4"
+            }
+          ]
+        }
+      },
+      {
+        "source": "labels",
+        "target": "System.Tags",
+        "mapper": "MapTags"
+      },
+      {
+        "source": "comment",
+        "target": "System.History",
+        "mapper": "MapRendered"
+      },
+      {
+        "source": "History",
+        "source-type": "name",
+        "target": "System.Description",
+        "mapper": "MapRendered"
+      },
+      {
+        "source": "status",
+        "target": "System.State",
+        "for": "All",
+        "mapping": {
+          "values": [
+            {
+              "source": "To Do",
+              "target": "New"
+            },
+            {
+              "source": "Open",
+              "target": "New"
+            },
+            {
+              "source": "New",
+              "target": "New"
+            },
+            {
+              "source": "Ready",
+              "target": "Ready"
+            },
+            {
+              "source": "Accepted",
+              "target": "Accepted"
+            },      
+            {
+              "source": "Analysis",
+              "target": "In Analysis And Estimate"
+            },
+            {
+              "source": "In Analysis",
+              "target": "In Analysis And Estimate"
+            },
+            {
+              "source": "Analysis Review",
+              "target": "In Analysis And Estimate"
+            },
+            {
+              "source": "Ready for Analysis",
+              "target": "In Analysis And Estimate"
+            },
+            {
+              "source": "In Analysis and Estimation",
+              "target": "In analysis and estimate"
+            },            
+            {
+              "source": "In Progress",
+              "target": "In Development"
+            },            
+            {
+              "source": "InProgress",
+              "target": "In Development"
+            },
+            {
+              "source": "In Development",
+              "target": "In Development"
+            },
+            {
+              "source": "Ready for Development",
+              "target": "Ready"
+            }, 
+            {
+              "source": "In Review",
+              "target": "BA Review"
+            },
+            {
+              "source": "In Testing",
+              "target": "In Testing"
+            },
+            {
+              "source": "In Release",
+              "target": "In Release"
+            },
+            {
+              "source": "Ready for Testing",
+              "target": "Ready For Testing"
+            },
+            {
+              "source": "Blocked",
+              "target": "In Development"
+            },
+            {
+              "source": "On Track",
+              "target": "In Development"
+            },
+            {
+              "source": "On Hold",
+              "target": "New"
+            },
+            {
+              "source": "Ready for Testing",
+              "target": "Ready For Testing"
+            },
+            {
+              "source": "Done",
+              "target": "Closed"
+            },
+            {
+              "source": "Closed",
+              "target": "Closed"
+            },
+            {
+              "source": "Resolved",
+              "target": "Resolved"
+            },        
+            {
+              "source": "Removed",
+              "target": "Removed"
+            }
+          ]
+        }
+      },
+      {
+        "source": "Sprint",
+        "source-type": "name",
+        "target": "System.IterationPath",
+        "mapper": "MapSprint"
+      },
+	  { 
+	    "source": "fixVersions",
+		"target": "Custom.FixVersion"
+      },
+	  {
+	    "source": "duedate",
+		"target": "Microsoft.VSTS.Scheduling.DueDate"
+	  },
+      {
+        "source": "Story Points",
+        "source-type": "name",
+        "target": "Microsoft.VSTS.Scheduling.StoryPoints",
+        "not-for": "Task"
+      },
+      {
+        "source": "Original Estimate",
+        "source-type": "name",
+        "target": "Microsoft.VSTS.Scheduling.OriginalEstimate",
+        "not-for": "Task"
+      },
+      {
+        "source": "Actual",
+        "source-type": "name",
+        "target": "Custom.ActualEffortinHours",
+        "not-for": "Task"
+      },
+      {
+        "source": "timeestimate",
+        "target": "Microsoft.VSTS.Scheduling.RemainingWork",
+        "mapper": "MapRemainingWork",
+        "for": "Bug,Task"
+      }, 
+      {
+        "source": "Fix Version/s",
+        "source-type": "name",
+        "target": "Custom.FixVersion",
+        "not-for": "Task"
+      },  
+      {
+        "source": "environment",
+        "source-type": "name",
+        "target": "Microsoft.VSTS.TCM.SystemInfo",
+        "for": "Bug,Epic"
+      },
+      {
+        "source": "Case Number",
+        "source-type": "name",
+        "target": "Custom.CaseNumber",
+        "for": "Incident"
+      },
+      {
+        "source": "Case Count",
+        "source-type": "name",
+        "target": "Custom.CaseCount",
+        "for": "Incident"
+      },
+      {
+        "source": "Module",
+        "source-type": "name",
+        "target": "Custom.ProductModule",
+        "for": "Incident"
+      }, 
+      {
+        "source": "Deployment Status",
+        "source-type": "name",
+        "target": "Custom.TargetRelease",
+        "for": "Incident"
+      }
+    ]
+  }
+}
