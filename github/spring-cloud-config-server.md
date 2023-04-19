@@ -26,7 +26,7 @@ This document explains how to configure `Spring Cloud Config Server` application
 - Create the `known_hosts` file by running the below command and save it in the environment (VM or Docker container) where App runs.
 
   ```bash
-  ssh-keyscan github.com >> ~/.ssh/known_hosts
+  curl --silent https://api.github.com/meta | jq --raw-output '"github.com "+.ssh_keys[]' >> ~/.ssh/known_hosts
   ```
 - Store the `id_ecdsa` file created in the pre-requisite in the app environment (VM/Docker container) where app runs.
     ```bash
