@@ -6,7 +6,7 @@ Follow this document if you use maven to build java project and deploy to Azure 
   - Open snow ticket with cloud security team for this [here](https://premierprod.service-now.com/premiernow?id=dept_cat_item&sys_id=c64bdf091bdc2494be08975e034bcbbb)
   - Select "Azure" in Environment.
 
-- App service name, App Service Resource Group will be provided by cloud devops team. No need Service connection for this in ADO. 
+- App service name, App Service Resource Group can be retrieved from the Azure App service in Azure Cloud.  No need Service connection for this in ADO. 
 
 - Library group is needed for deploy environments. For example: java-app-service-dev must have following key/values.
 
@@ -15,3 +15,9 @@ Follow this document if you use maven to build java project and deploy to Azure 
     | var_az_app_service_rg | ResourceGroupName |
     | var_az_app_service | AppServiceName | 
     | var_spring_profiles_active | Optional_Used_in_AppSettings | 
+
+
+
+# Points to consider
+- To define your application port, consider setting `PORT` in app settings. Check the `pipelines/deploy.yaml` file. 
+- To control the Heap Memory in Java application, you have to set the `JAVA_OPTS` in the app settings. Check the `pipelines/deploy.yaml` file. 

@@ -15,9 +15,11 @@ stages:
         mavenVersionOption: 'Path'
         mavenDirectory: $(SYSTEM_MAVEN_3_HOME)
 
+    # Creating artifacts that contains only the JAR file
     - bash: mkdir artifacts ; cp target/pasta-bishop-*.jar artifacts/
       displayName: Prepare Artifacts
 
+    # Publish the artifacts so that the deploy stage can consume it. 
     - publish: artifacts
       artifact: deploy
       displayName: Publish Artifact

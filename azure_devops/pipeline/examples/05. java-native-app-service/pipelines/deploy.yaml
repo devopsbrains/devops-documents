@@ -16,6 +16,7 @@ stages:
   dependsOn: ${{ parameters.depends_on }}
   condition: ${{ parameters.condition }}
 
+  # This variable group contains details about your app service.
   variables:
   - group: "${{ parameters.deploy_variable_group }}"
   
@@ -23,6 +24,7 @@ stages:
   - deployment: deploy
     environment: "${{ parameters.ado_environment }}"
 
+    # This is for blue/green deployment strategy
     variables:
       ${{ if in(parameters.blue_green, 'False', 'false') }}:
         APP_SERVICE_SLOT: 'production'
@@ -61,6 +63,10 @@ stages:
                   {
                     "name": "PORT",
                     "value": "8080"
+                  },
+                  {
+                    "name": "JAVA_OPTS",
+                    "value": "-Xms512m -Xmx1024m" 
                   },
                   {
                     "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
@@ -143,7 +149,8 @@ stages:
             steps:
             - download: none 
             
-            # Only active slots can be swapped. Hence starting the standyby slot if not started already
+            # Only active slots can be swapped. 
+            # Hence starting the standyby slot if not started already
             - task: AzureAppServiceManage@0
               displayName: Start the Standby Slot
               inputs:
@@ -154,6 +161,18 @@ stages:
                 SpecifySlotOrASE: true
                 Slot: 'staging'
 
+            # Starting the production slot
+            - task: AzureAppServiceManage@0
+              displayName: Start the Production Slot
+              inputs:
+                azureSubscription:  ${{ parameters.az_subscription_sc }} 
+                ResourceGroupName: $(var_az_app_service_rg)
+                WebAppName: $(var_az_app_service)
+                Action: 'Start Azure App Service' 
+                SpecifySlotOrASE: true
+                Slot: 'production'
+
+            # Switch Slots Staging <-> Production
             - task: AzureAppServiceManage@0
               inputs:
                 azureSubscription: ${{ parameters.az_subscription_sc }}
